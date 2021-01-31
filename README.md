@@ -1,6 +1,6 @@
 # qmk-hid-rgb
 
-This repo contains a PoC of using qmk's raw HID feature to control RGB on a keyboard. `hid_rgb.py` defines the primitives, and `alt_notification.py` is a simple CLI implementation. I've also included `dbus_intercept.py`, which is a more advanced implementation that automatically sends an RGB notification whenever I receive a Telegram message, using `dbus`.
+This repo contains a PoC of using qmk's raw HID feature to control RGB on a keyboard. `hid_rgb.py` defines the primitives, and `alt_notification.py` is a simple CLI implementation. I've also included `dbus_intercept.py`, which is a more realistic implementation that automatically sends an RGB notification whenever I receive a Telegram message, using `dbus`.
 
 ## Environment
 
