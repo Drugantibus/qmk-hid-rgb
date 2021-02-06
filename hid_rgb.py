@@ -138,3 +138,43 @@ class Alt:
             name = 'white'
         color = self.name2bytes.get(name)
         self.set_color(color)
+
+    def set_single_led(self, index, color):
+        data = tobytes([4, 1, index, color])
+        self.send(data)
+    
+    def set_single_led_rgb(self, index, r, g, b):
+        try:
+            self.set_single_led(index, tobytes([r, g, b]))
+        except ValueError:
+            print("[!] RGB values must be 0-255.\n[*] Defaulting to white.")
+            self.set_single_led(index, tobytes([255, 255, 255]))
+
+    def set_single_led_color(self, index, name):
+        if name not in self.name2bytes:
+            print("[?] Unrecognized name. Valid options are:")
+            for color in self.name2bytes.keys(): print(f"[-] {color}")
+            print("[*] Defaulting to white...")
+            name = 'white'
+        color = self.name2bytes.get(name)
+        self.set_single_led(index, color)
+
+    def set_zone(self, index, color):
+        data = tobytes([4, 2, index, color])
+        self.send(data)
+
+    def set_zone_rgb(self, index, r, g, b):
+        try:
+            self.set_zone(index, tobytes([r, g, b]))
+        except ValueError:
+            print("[!] RGB values must be 0-255.\n[*] Defaulting to white.")
+            self.set_zone(index, tobytes([255, 255, 255]))
+
+    def set_zone_color(self, index, name):
+        if name not in self.name2bytes:
+            print("[?] Unrecognized name. Valid options are:")
+            for color in self.name2bytes.keys(): print(f"[-] {color}")
+            print("[*] Defaulting to white...")
+            name = 'white'
+        color = self.name2bytes.get(name)
+        self.set_zone(index, color)

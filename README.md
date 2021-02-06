@@ -28,14 +28,12 @@ After importing the Alt class and creating an object, here are the functions ava
 
 `send_notification(mode, color, duration)`: Sets the specified color (in form of a 3 byte array) on part of the keyboard based on mode, then resets the previous state after `duration` seconds (defaults to 1).
 
- `send_notification_rgb(mode, r, g, b, duration)`: Wrapper for `send_notification` that accepts 3 ints for color.
- 
- `send_notification_color(mode, name, duration)`: Wrapper for `send_notification` that acceps a color name, defined in `name2bytes`.
- 
- `set_color(color)`: Similar to `send_notification`, but doesn't restore the previous state. No mode selection for now
- 
- `set_color_rgb(r, g, b)`: Wrapper
- 
- `set_color_name(name)`: Wrapper
- 
+`set_color(color)`: Similar to `send_notification`, but doesn't restore the previous state. No mode selection for now
+
+`set_single_led(index, color)`: Sets a single led to the given color. (0-indexed)
+
+`set_zone(index, color)`: Sets a zone to the given color, defined in my keymap as rows and sections of the underglow.
+
+Every function that has the `color` argument also has a `_rgb(..., r, g, b)` that accepts color as 3 0-255 ints, and a `_color(..., name)` that accepts a human-readable color defined in `name2bytes`.
+
  Please note that you should manually call `close()` on your instance at the end of your program, these functions leave the connection open on purpose.
