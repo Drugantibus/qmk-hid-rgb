@@ -37,3 +37,12 @@ After importing the Alt class and creating an object, here are the functions ava
 Every function that has the `color` argument also has a `_rgb(..., r, g, b)` that accepts color as 3 0-255 ints, and a `_color(..., name)` that accepts a human-readable color defined in `name2bytes`.
 
  Please note that you should manually call `close()` on your instance at the end of your program, these functions leave the connection open on purpose.
+
+## Contributing
+Any pull request, feature request, question, issue etc. is more than welcome! Don't hesitate to request a feature or modification you'd like (keeping in mind that this is not intended to be an OpenRGB style project... At least for now ;) )
+
+## TODO
+- [ ] Add HSV support
+- [ ] Generalize more to make support for other keyboards easier
+- [ ] Restructuring of code?
+- [ ] You tell me ;)  
