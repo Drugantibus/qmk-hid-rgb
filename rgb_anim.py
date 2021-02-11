@@ -17,8 +17,17 @@ def ripple(color):
     # sleep(1)
     # alt.set_state()
 
+def rainbow():
+    for led in range(105):
+        alt.set_single_led_hsv(led, led*3.5, 100, 100)
+        sleep(0.025)
+
 
 alt = Alt()
-ripple('white')
-sleep(0.5)
-ripple('orange')
+# ripple('white')
+# sleep(0.5)
+# ripple('orange')
+
+# sleep(2)
+
+rainbow()

@@ -6,7 +6,10 @@ This repo contains a PoC of using qmk's raw HID feature to control RGB on a keyb
 
 ### Host
 
-This was developed on a Linux system, using a Drop ALT keyboard. Modifying it to work on your OS/keyboard should be pretty straightforward. First change the `vid`, `pid`, `usage_page`, and `usage_id` variables in `__init__` to match your keyboard's, if it's not an ALT. You can find the first two in its `config.h`, while the HID params *should* be `0xFF60` and `0x61` respectively, although I had to override them in my `config.h` because Drop doesn't like to do things the standard way. You may also need to change the hardcoded message length in `pad_message()` if your board uses a 32 byte `RAW_EPSIZE`. Please refer to [the docs](https://docs.qmk.fm/using-qmk/software-features/feature_rawhid) and [my keymap](https://github.com/Drugantibus/qmk_firmware/tree/master/keyboards/massdrop/alt/keymaps/drugo) for more info. Then, follow the instructions [here](https://pypi.org/project/hid/) to configure the `hid` module to work on your OS.
+This was developed on a Linux system, using a Drop ALT keyboard. Modifying it to work on your OS/keyboard should be pretty straightforward. First change the `vid`, `pid`, `usage_page`, and `usage_id` variables in `__init__` to match your keyboard's, if it's not an ALT. You can find the first two in its `config.h`, while the HID params *should* be `0xFF60` and `0x61` respectively, although I had to override them in my `config.h` because Drop doesn't like to do things the standard way. You may also need to change the hardcoded message length in `pad_message()` if your board uses a 32 byte `RAW_EPSIZE`. Please refer to [the docs](https://docs.qmk.fm/using-qmk/software-features/feature_rawhid) and [my keymap](https://github.com/Drugantibus/qmk_firmware/tree/master/keyboards/massdrop/alt/keymaps/drugo) for more info. Then, follow the instructions [here](https://pypi.org/project/hid/) to configure the `hid` module to work on your OS. You may also need to create a udev rule if you get an `unable to open device` error similar to this:
+```
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="eed3", TAG+="uaccess"
+```
 
 ### Keyboard
 
@@ -34,7 +37,7 @@ After importing the Alt class and creating an object, here are the functions ava
 
 `set_zone(index, color)`: Sets a zone to the given color, defined in my keymap as rows and sections of the underglow.
 
-Every function that has the `color` argument also has a `_rgb(..., r, g, b)` that accepts color as 3 0-255 ints, and a `_color(..., name)` that accepts a human-readable color defined in `name2bytes`.
+Every function that has the `color` argument also has a `_rgb(..., r, g, b)` wrapper that accepts color as 3 0-255 ints, a `_hsv(..., h, s, v)` that expects a `h` value between 0 and 360 (but works for higher numbers as expected), `s` and `v` values between 0 and 100,  and a `_color(..., name)` that accepts a human-readable color defined in `name2bytes`.
 
  Please note that you should manually call `close()` on your instance at the end of your program, these functions leave the connection open on purpose.
 
@@ -42,7 +45,7 @@ Every function that has the `color` argument also has a `_rgb(..., r, g, b)` tha
 Any pull request, feature request, question, issue etc. is more than welcome! Don't hesitate to request a feature or modification you'd like (keeping in mind that this is not intended to be an OpenRGB style project... At least for now ;) )
 
 ## TODO
-- [ ] Add HSV support
+- [x] Add HSV support
 - [ ] Generalize more to make support for other keyboards easier
 - [ ] Restructuring of code?
 - [ ] You tell me ;)  

@@ -20,6 +20,7 @@ Possible message format:
         No parameters, returns (sends) a value as in the 0x01 section
 """
 
+import math
 import hid
 from time import sleep
 
@@ -38,6 +39,31 @@ def tobytes(data):
     for num in data:
         out += tobyte(num)
     return out
+
+def hsv_to_rgb(h, s, v):
+    h /= 360
+    s /= 100
+    v /= 100
+    i = math.floor(h*6)
+    f = h*6 - i
+    p = v * (1-s)
+    q = v * (1-f*s)
+    t = v * (1-(1-f)*s)
+
+    r, g, b = [
+        (v, t, p),
+        (q, v, p),
+        (p, v, t),
+        (p, q, v),
+        (t, p, v),
+        (v, p, q),
+    ][int(i%6)]
+
+    r, g, b = int(r * 255), int(g * 255), int(b * 255)
+
+    return r, g, b
+
+
 class Alt:
 
     device = None
@@ -110,6 +136,13 @@ class Alt:
             print("[!] RGB values must be 0-255.\n[*] Defaulting to white.")
             self.send_notification(mode, tobytes([255, 255, 255]), duration)
 
+    def send_notification_hsv(self, mode, h, s, v, duration = 1):
+        if 0<=s<= 100 and 0<=v<=100:
+            r, g, b = hsv_to_rgb(h, s, v)
+            self.send_notification_rgb(mode, r, g, b, duration)
+        else:
+            print("[!] s and v values must be 0-100")
+
     def send_notification_color(self, mode, name, duration = 1):
         if name not in self.name2bytes:
             print("[?] Unrecognized name. Valid options are:")
@@ -129,6 +162,13 @@ class Alt:
         except ValueError:
             print("[!] RGB values must be 0-255.\n[*] Defaulting to white.")
             self.set_color(tobytes([255, 255, 255]))
+        
+    def set_color_hsv(self, h, s, v):
+        if 0<=s<= 100 and 0<=v<=100:
+            r, g, b = hsv_to_rgb(h, s, v)
+            self.set_color_rgb(r, g, b)
+        else:
+            print("[!] s and v values must be 0-100")
 
     def set_color_name(self, name):
         if name not in self.name2bytes:
@@ -150,6 +190,13 @@ class Alt:
             print("[!] RGB values must be 0-255.\n[*] Defaulting to white.")
             self.set_single_led(index, tobytes([255, 255, 255]))
 
+    def set_single_led_hsv(self, index, h, s, v):
+        if 0<=s<= 100 and 0<=v<=100:
+            r, g, b = hsv_to_rgb(h, s, v)
+            self.set_single_led_rgb(index, r, g, b)
+        else:
+            print("[!] s and v values must be 0-100")
+
     def set_single_led_color(self, index, name):
         if name not in self.name2bytes:
             print("[?] Unrecognized name. Valid options are:")
@@ -169,6 +216,13 @@ class Alt:
         except ValueError:
             print("[!] RGB values must be 0-255.\n[*] Defaulting to white.")
             self.set_zone(index, tobytes([255, 255, 255]))
+
+    def set_zone_hsv(self, index, h, s, v):
+        if 0<=s<= 100 and 0<=v<=100:
+            r, g, b = hsv_to_rgb(h, s, v)
+            self.set_zone_rgb(index, r, g, b)
+        else:
+            print("[!] s and v values must be 0-100")
 
     def set_zone_color(self, index, name):
         if name not in self.name2bytes:
