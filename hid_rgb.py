@@ -152,32 +152,37 @@ class Alt:
         color = self.name2bytes.get(name)
         self.send_notification(mode, color, duration)
 
-    def set_color(self, color):
-        data = tobytes([2, 2, color])
+    def set_color(self, mode, color):
+        if mode == 'bottom':
+            data = tobytes([2, 1, color])
+        elif mode == 'full':
+            data = tobytes([2, 2, color])
+        elif mode == 'under':
+            data = tobytes([2, 3, color])
         self.send(data)
 
-    def set_color_rgb(self, r, g, b):
+    def set_color_rgb(self, mode, r, g, b):
         try:
-            self.set_color(tobytes([r, g, b]))
+            self.set_color(mode, tobytes([r, g, b]))
         except ValueError:
             print("[!] RGB values must be 0-255.\n[*] Defaulting to white.")
             self.set_color(tobytes([255, 255, 255]))
         
-    def set_color_hsv(self, h, s, v):
+    def set_color_hsv(self, mode, h, s, v):
         if 0<=s<= 100 and 0<=v<=100:
             r, g, b = hsv_to_rgb(h, s, v)
-            self.set_color_rgb(r, g, b)
+            self.set_color_rgb(mode, r, g, b)
         else:
             print("[!] s and v values must be 0-100")
 
-    def set_color_name(self, name):
+    def set_color_name(self, mode, name):
         if name not in self.name2bytes:
             print("[?] Unrecognized name. Valid options are:")
             for color in self.name2bytes.keys(): print(f"[-] {color}")
             print("[*] Defaulting to white...")
             name = 'white'
         color = self.name2bytes.get(name)
-        self.set_color(color)
+        self.set_color(mode, color)
 
     def set_single_led(self, index, color):
         data = tobytes([4, 1, index, color])

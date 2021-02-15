@@ -1,4 +1,4 @@
-#!/home/drugo/.pyenv/shims/python
+#!/usr/bin/python
 
 import sys
 from hid_rgb import Alt
