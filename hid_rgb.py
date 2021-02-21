@@ -6,18 +6,34 @@ Possible message format:
         0x02: Keylight only
         0x03: Underglow only
         0x04: All LEDs off
-        0x05: Next RGB animation
+        0x05: Go to next RGB animation
     0x02: Notifications
         0x01: Set the "bottom" (user-facing) part of the underglow to a specific color
             0xXX: Red value
             0xXX: Green value
             0xXX: Blue value
+            (hereafter (colors))
         0x02: Set the whole keyboard to a color
-            (same RGB parameters)
+            (colors)
         0x03: Set the whole underglow to a color
-            (same RGB parameters)
+            (colors)
     0x03: Get the current LED state
         No parameters, returns (sends) a value as in the 0x01 section
+    0x04: Control single or group of LEDs
+        0x01: Change a single LED's color
+            0xXX: LED number
+            (colors)
+        0x02: Change a group of LEDs
+            0x01-0x05: nth row
+                (colors)
+            0x06: Bottom underglow
+                (colors)
+            0x07: Right underglow
+                (colors)
+            0x08: Top underglow
+                (colors)
+            0x09: Left underglow
+                (colors)
 """
 
 import math
@@ -237,3 +253,26 @@ class Alt:
             name = 'white'
         color = self.name2bytes.get(name)
         self.set_zone(index, color)
+
+class Animation:
+
+    keyboard = None
+
+    def __init__(self):
+        self.keyboard = Alt()
+
+    def go_around(self, color):
+        for i in range(67, 105):
+            self.keyboard.set_single_led_color(i, color)
+            sleep(0.05)
+        # sleep(1)
+        # self.keyboard.set_state()
+
+    def ripple(self, color):
+        a = 74
+        for i in range(8):
+            self.keyboard.set_single_led_color(a + i, color)
+            self.keyboard.set_single_led_color(a - i, color)
+            sleep(0.025)
+        # sleep(1)
+        # self.keyboard.set_state()
