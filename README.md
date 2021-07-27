@@ -1,3 +1,8 @@
+___
+# WARNING
+___
+Due to a recent upstream bugfix involving LED_FLAGS and the way this repo works, this repo will probably break and remain broken forever. Since [QMK XAP](https://github.com/qmk/qmk_firmware/issues/11567) is under development, it probably doesn't make a ton of sense to rewrite this from scratch if it's going to be obsoleted soon. If you implemented this and it works, make sure to only merge upstream on a different branch so you can choose if you want to keep this functionality or have the latest QMK version.
+
 # qmk-hid-rgb
 
 This repo contains a PoC of using qmk's raw HID feature to control RGB on a keyboard. `hid_rgb.py` defines the primitives, and `alt_notification.py` is a simple CLI implementation. I've also included `dbus_intercept.py`, which is a more realistic implementation that automatically sends an RGB notification whenever I receive a Telegram message, using `dbus`.
